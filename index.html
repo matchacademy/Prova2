@@ -224,35 +224,62 @@
       </form>
     </section>
 
-    <!-- 4. Schermata dell'Hub della Materia (Buddy e Quiz) -->
+    <!-- 4. Schermata dell'Hub della Materia (Buddy Cliccabile, Quiz e Consigli Extra) -->
     <section id="screen-hub" class="px-5 pt-4 pb-24 hidden">
       <button id="btn-torna-dash" class="text-sm text-accent font-semibold mb-3 hover:underline">← Torna alla tua Home</button>
       
-      <div class="bg-white rounded-2xl p-4 border border-ink/5 shadow-sm mb-6">
+      <!-- Card Intestazione Materia -->
+      <div class="bg-white rounded-2xl p-4 border border-ink/5 shadow-sm mb-5">
         <h2 class="font-display font-bold text-lg text-accent" id="hub-titolo-materia">—</h2>
         <p class="text-xs text-ink/50 mt-0.5" id="hub-sottotitolo-prof">—</p>
       </div>
 
-      <div class="mb-8">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-display font-bold text-base">🎯 Studenti disponibili (Buddy)</h3>
-          <button id="btn-refresh-buddies" class="text-xs text-accent font-semibold hover:underline">Aggiorna</button>
+      <div class="space-y-5">
+        
+        <!-- PARTE 1: Sezione Compagni di studio (Buddy) - CLICCABILE / ACCORDION -->
+        <div class="bg-white rounded-3xl border border-ink/5 shadow-sm overflow-hidden">
+          <!-- Intestazione cliccabile che apre/chiude la lista -->
+          <button id="btn-toggle-buddy" class="w-full p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors outline-none">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-display font-bold">🎯 Compagni di Studio (Buddy)</span>
+              <span id="buddy-badge-count" class="hidden text-[11px] font-bold px-2 py-0.5 bg-accent text-white rounded-full">0</span>
+            </div>
+            <!-- Freccetta dinamica -->
+            <span id="buddy-arrow" class="text-ink/40 text-sm transform transition-transform duration-200">▼</span>
+          </button>
+          
+          <!-- Contenitore a scomparsa (Inizialmente chiuso con classe 'hidden') -->
+          <div id="buddy-collapse-content" class="hidden px-5 pb-5 border-t border-ink/5 pt-4">
+            <div class="flex justify-end mb-2">
+              <button id="btn-refresh-buddies" class="text-[11px] text-accent font-semibold hover:underline">Aggiorna lista ↻</button>
+            </div>
+            <div id="buddy-loading" class="text-sm text-ink/40 py-4 text-center">Cerco compagni di studio...</div>
+            <div id="buddy-empty" class="hidden text-sm text-ink/40 py-4 text-center italic">Nessun altro studente registrato con questo professore. Sarai il primo!</div>
+            <div id="buddy-list" class="space-y-3 max-h-[200px] overflow-y-auto pr-1"></div>
+          </div>
         </div>
 
-        <div id="buddy-loading" class="text-sm text-ink/40 py-6 text-center">Cerco compagni di studio...</div>
-        <div id="buddy-empty" class="hidden text-sm text-ink/40 py-6 text-center italic">Nessun altro studente registrato con questo professore. Sarai il primo!</div>
-        <div id="buddy-list" class="space-y-3"></div>
-      </div>
-
-      <!-- Quiz Card -->
-      <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz</h2>
-          <p class="text-xs text-white/60">Domande specifiche per questa materia.</p>
+        <!-- PARTE 2: Arena dei Quiz -->
+        <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4 shadow-md">
+          <div>
+            <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz</h2>
+            <p class="text-xs text-white/60">Domande specifiche per questa materia.</p>
+          </div>
+          <button id="btn-start-quiz" class="shrink-0 bg-white text-ink font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-white/90 transition-colors">
+            Avvia
+          </button>
         </div>
-        <button id="btn-start-quiz" class="shrink-0 bg-white text-ink font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-white/90 transition-colors">
-          Avvia
-        </button>
+
+        <!-- PARTE 3: Consigli Extra & Domande d'Esame -->
+        <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm">
+          <h3 class="font-display font-bold text-base mb-3">💡 Consigli Extra & Domande d'Esame</h3>
+          
+          <div id="consigli-loading" class="text-sm text-ink/40 py-4 text-center">Caricamento materiale utile...</div>
+          <div id="consigli-empty" class="hidden text-sm text-ink/40 py-4 text-center italic">Nessun consiglio o domanda d'esame caricata per questa materia.</div>
+          
+          <div id="consigli-list" class="space-y-3"></div>
+        </div>
+
       </div>
     </section>
 
@@ -296,11 +323,12 @@
 /* =====================================================================
    CONFIGURAZIONE LINK DATABASE (DIRETTI GOOGLE SPREADSHEET)
    ===================================================================== */
-const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyU87t4qj_8Ntx8-6mVXJrZBd5HU6jiNgy2RKmOikz8fjlCgRj5OB3aG7YazoHAAOEysw/exec"; 
+const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbcf0k1mPLHinsadu_0wH0UNrWNifvm_JP49d26RZaM4wWEejdxb4Bnhu-_QWQ7rSNGQg/exec"; 
 
 const URL_SHEET_OPZIONI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=opzioni";
 const URL_SHEET_QUIZ = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=quiz";
 const URL_SHEET_MATERIE_UTENTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=Materie_Utenti";
+const URL_SHEET_CONSIGLI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=consigli";
 
 /* ---------------------------------------------------------------------
    STATO APPLICAZIONE GLOBALE
@@ -336,7 +364,7 @@ function mostraSchermata(nome) {
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
-/* NAVEGAZIONE SCHERMATE INIZIALI */
+/* NAVIGAZIONE LOGIN / REGISTRAZIONE */
 document.getElementById("btn-go-login").addEventListener("click", () => {
   document.getElementById("login-error-msg").classList.add("hidden");
   mostraSchermata("login");
@@ -348,8 +376,22 @@ document.getElementById("btn-go-register").addEventListener("click", () => {
 document.getElementById("btn-back-welcome-1").addEventListener("click", () => mostraSchermata("welcome"));
 document.getElementById("btn-back-welcome-2").addEventListener("click", () => mostraSchermata("welcome"));
 
+/* GESTIONE APERTURA/CHIUSURA TENDA BUDDY */
+document.getElementById("btn-toggle-buddy").addEventListener("click", () => {
+  const content = document.getElementById("buddy-collapse-content");
+  const arrow = document.getElementById("buddy-arrow");
+  
+  if (content.classList.contains("hidden")) {
+    content.classList.remove("hidden");
+    arrow.textContent = "▲";
+  } else {
+    content.classList.add("hidden");
+    arrow.textContent = "▼";
+  }
+});
+
 /* =====================================================================
-   FASE 1: DOWNLOAD OPZIONI ED INIZIALIZZAZIONE FORM
+   FASE 1: DOWNLOAD MENU OPZIONI ED INIZIALIZZAZIONE FORM
    ===================================================================== */
 async function inizializzaOpzioniOnboarding() {
   try {
@@ -453,7 +495,6 @@ document.getElementById("form-login").addEventListener("submit", async (e) => {
       document.getElementById("btn-logout").classList.remove("hidden");
       
       await caricaDatiMaterieLocaliEDb();
-      // Filtriamo le materie dell'utente recuperate dal db remoto
       elencoMaterieUtente = databaseTuttiIscritti.filter(x => x.username.toLowerCase() === utenteLoggato.username.toLowerCase());
       localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
       
@@ -621,7 +662,7 @@ document.getElementById("form-aggiungi-materia").addEventListener("submit", asyn
 });
 
 /* =====================================================================
-   FASE 4: HUB INTERNO DELLA MATERIA SELEZIONATA (BUDDY & ARENA)
+   FASE 4: HUB INTERNO DELLA MATERIA (BUDDY & CONSIGLI)
    ===================================================================== */
 document.getElementById("btn-torna-dash").addEventListener("click", apriDashboardHome);
 document.getElementById("btn-refresh-buddies").addEventListener("click", () => caricaDatiMaterieLocaliEDb().then(aggiornaListaBuddyHub));
@@ -630,7 +671,13 @@ function avviaHubMateria(materiaCard) {
   materiaHubAttiva = materiaCard;
   document.getElementById("hub-titolo-materia").textContent = materiaCard.materia;
   document.getElementById("hub-sottotitolo-prof").textContent = `Professore: ${materiaCard.professore} · Stato tuo studio: ${materiaCard.statoStudio}`;
+  
+  // Resettiamo la tendina Buddy chiusa per ordine visivo
+  document.getElementById("buddy-collapse-content").classList.add("hidden");
+  document.getElementById("buddy-arrow").textContent = "▼";
+
   aggiornaListaBuddyHub();
+  caricaEVisualizzaConsigliExtra();
   mostraSchermata("hub");
 }
 
@@ -638,6 +685,7 @@ function aggiornaListaBuddyHub() {
   const loading = document.getElementById("buddy-loading");
   const empty = document.getElementById("buddy-empty");
   const list = document.getElementById("buddy-list");
+  const badgeCount = document.getElementById("buddy-badge-count");
 
   loading.classList.add("hidden"); empty.classList.add("hidden"); list.innerHTML = "";
 
@@ -650,6 +698,14 @@ function aggiornaListaBuddyHub() {
     b.professore.toLowerCase().trim() === profCercato &&
     b.username.toLowerCase().trim() !== ilMioUser
   );
+
+  // Aggiorna il numerino contatore sul titolo
+  if (compagniTrovati.length > 0) {
+    badgeCount.textContent = compagniTrovati.length;
+    badgeCount.classList.remove("hidden");
+  } else {
+    badgeCount.classList.add("hidden");
+  }
 
   if (compagniTrovati.length === 0) {
     empty.classList.remove("hidden");
@@ -695,6 +751,67 @@ async function caricaDatiMaterieLocaliEDb() {
     }).filter(x => x.username !== "");
   } catch (err) {
     console.warn("Impossibile sincronizzare la lista Buddy remota:", err);
+  }
+}
+
+/* =====================================================================
+   FASE 4.1: CARICAMENTO DEI CONSIGLI EXTRA DA GOOGLE SHEETS
+   ===================================================================== */
+async function caricaEVisualizzaConsigliExtra() {
+  const loading = document.getElementById("consigli-loading");
+  const empty = document.getElementById("consigli-empty");
+  const list = document.getElementById("consigli-list");
+
+  loading.classList.remove("hidden");
+  empty.classList.add("hidden");
+  list.innerHTML = "";
+
+  try {
+    const res = await fetch(URL_SHEET_CONSIGLI);
+    if (!res.ok) throw new Error();
+    const testo = await res.text();
+    const inizio = testo.indexOf("{");
+    const fine = testo.lastIndexOf("}");
+    const json = JSON.parse(testo.substring(inizio, fine + 1));
+    const righe = json.table.rows || [];
+
+    const materiaAttivaNorm = materiaHubAttiva.materia.toLowerCase().trim();
+
+    const consigliTrovati = righe.map(r => {
+      const c = r?.c || [];
+      return {
+        materia: (c[0]?.v ?? "").toString().trim().toLowerCase(),
+        tipo: (c[1]?.v ?? "").toString().trim(), 
+        testo: (c[2]?.v ?? "").toString().trim()
+      };
+    }).filter(x => x.materia === materiaAttivaNorm && x.testo !== "");
+
+    loading.classList.add("hidden");
+
+    if (consigliTrovati.length === 0) {
+      empty.classList.remove("hidden");
+      return;
+    }
+
+    consigliTrovati.forEach(item => {
+      const etichettaColore = item.tipo.toLowerCase().includes("domanda") ? "bg-coral/10 text-coral" : "bg-mint/10 text-mint";
+      
+      const card = document.createElement("div");
+      card.className = "bg-paper border border-ink/5 rounded-2xl p-3.5 card-in text-sm";
+      card.innerHTML = `
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md ${etichettaColore}">
+            ${escapeHtml(item.tipo)}
+          </span>
+        </div>
+        <p class="text-ink/80 leading-relaxed">${escapeHtml(item.testo).replace(/\n/g, '<br>')}</p>
+      `;
+      list.appendChild(card);
+    });
+  } catch (err) {
+    loading.classList.add("hidden");
+    empty.textContent = "Impossibile caricare i consigli in questo momento.";
+    empty.classList.remove("hidden");
   }
 }
 
