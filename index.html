@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Match Accademico - Lab</title>
 
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;600;700&family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
 
 <script>
   tailwind.config = {
@@ -51,6 +53,7 @@
 
   <div class="max-w-md mx-auto min-h-screen bg-paper shadow-2xl relative overflow-x-hidden">
 
+    <!-- Header -->
     <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/5 px-5 pt-5 pb-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-accent flex items-center justify-center text-white font-display font-bold text-sm">MA</div>
@@ -61,6 +64,7 @@
       </button>
     </header>
 
+    <!-- 1. Schermata di Onboarding (Anagrafica Unica con Sede Svincolata) -->
     <section id="screen-onboarding" class="px-6 pt-6 pb-10 hidden">
       <h1 class="text-2xl font-display font-bold leading-tight mb-1">Crea il tuo profilo<br>Accademico</h1>
       <p class="text-ink/60 text-sm mb-6">Inserisci i tuoi dati una sola volta per accedere alla tua Dashboard ed entrare in contatto con altri studenti.</p>
@@ -114,6 +118,7 @@
       </form>
     </section>
 
+    <!-- 2. Schermata Dashboard (Home Personale) -->
     <section id="screen-dashboard" class="px-5 pt-4 pb-10 hidden">
       <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm mb-6 card-in">
         <h2 class="text-xl font-display font-bold mb-1">Bentornato, <span id="dash-username"></span>! 🎓</h2>
@@ -134,6 +139,7 @@
       <div id="lista-materie-utenti" class="space-y-3"></div>
     </section>
 
+    <!-- 3. Schermata per Aggiungere un Esame (Modulo Condizionale Smart) -->
     <section id="screen-aggiungi-materia" class="px-5 pt-4 pb-10 hidden">
       <button id="btn-annulla-materia" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Annulla e torna alla Home</button>
       <h2 class="text-xl font-display font-bold mb-4">Aggiungi un Esame alla tua Dashboard</h2>
@@ -146,7 +152,9 @@
 
         <div>
           <label class="block text-sm font-semibold mb-1.5" for="select-professore">Professore</label>
-          <select id="select-professore" required class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent"></select>
+          <select id="select-professore" required disabled class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed">
+            <option value="" disabled selected>Scegli prima una materia...</option>
+          </select>
         </div>
 
         <div>
@@ -164,6 +172,7 @@
       </form>
     </section>
 
+    <!-- 4. Schermata dell'Hub della Materia (Buddy e Quiz) -->
     <section id="screen-hub" class="px-5 pt-4 pb-24 hidden">
       <button id="btn-torna-dash" class="text-sm text-accent font-semibold mb-3 hover:underline">← Torna alla tua Home</button>
       
@@ -183,6 +192,7 @@
         <div id="buddy-list" class="space-y-3"></div>
       </div>
 
+      <!-- Quiz Card -->
       <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz</h2>
@@ -194,6 +204,7 @@
       </div>
     </section>
 
+    <!-- 5. Schermata del Quiz -->
     <section id="screen-quiz" class="px-5 pt-4 pb-10 hidden">
       <div class="flex items-center justify-between mb-3">
         <button id="btn-quiz-exit" class="text-sm text-ink/40 hover:text-ink/70">← Esci</button>
@@ -209,6 +220,7 @@
       <p id="quiz-feedback" class="hidden text-center text-sm font-semibold mt-2"></p>
     </section>
 
+    <!-- 6. Schermata Risultati del Quiz -->
     <section id="screen-quiz-results" class="px-6 pt-10 pb-10 hidden text-center">
       <div class="text-5xl mb-4">🏆</div>
       <h2 class="font-display font-bold text-2xl mb-1">Quiz completato!</h2>
@@ -245,6 +257,7 @@ const URL_SHEET_MATERIE_UTENTI = "https://docs.google.com/spreadsheets/d/12iR7iU
 let utenteLoggato = null;       
 let elencoMaterieUtente = [];   
 let databaseTuttiIscritti = [];  
+let mappaMaterieProfessori = {}; // Struttura ad albero dinamica: { "chirurgia": ["Cocorullo", "Agrusa"] }
 let QUIZ_DOMANDE = [];
 const SECONDI_PER_DOMANDA = 20;
 
@@ -284,36 +297,49 @@ async function inizializzaOpzioniOnboarding() {
     const righe = json.table.rows || [];
 
     let universitaSet = new Set();
-    let materieSet = new Set();
-    let professoriSet = new Set();
     let sediSet = new Set();
+    mappaMaterieProfessori = {}; // Resettiamo la mappa delle dipendenze
 
     righe.forEach(riga => {
       const c = riga?.c || []; 
       
-      // Filtri anti-intestazione integrati
+      // 1. Ateneo Unico (Svincolato)
       if (c[0]?.v) {
-        const val = c[0].v.toString().trim();
-        if (val.toLowerCase() !== "universita" && val.toLowerCase() !== "università") universitaSet.add(val);
+        const uniVal = c[0].v.toString().trim();
+        if (uniVal.toLowerCase() !== "universita" && uniVal.toLowerCase() !== "università") {
+          universitaSet.add(uniVal);
+        }
       }
-      if (c[1]?.v) {
-        const val = c[1].v.toString().trim();
-        if (val.toLowerCase() !== "materia") materieSet.add(val);
-      }
-      if (c[2]?.v) {
-        const val = c[2].v.toString().trim();
-        if (val.toLowerCase() !== "professore") professoriSet.add(val);
-      }
+      
+      // 2. Sede Unica (Svincolata da tutto, globale)
       if (c[3]?.v) {
-        const val = c[3].v.toString().trim();
-        if (val.toLowerCase() !== "sede") sediSet.add(val);
+        const sedeVal = c[3].v.toString().trim();
+        if (sedeVal.toLowerCase() !== "sede") {
+          sediSet.add(sedeVal);
+        }
+      }
+
+      // 3. Associazione Condizionale Materia -> Professore
+      if (c[1]?.v && c[2]?.v) {
+        const materiaVal = c[1].v.toString().trim();
+        const profVal = c[2].v.toString().trim();
+
+        if (materiaVal.toLowerCase() !== "materia" && profVal.toLowerCase() !== "professore") {
+          if (!mappaMaterieProfessori[materiaVal]) {
+            mappaMaterieProfessori[materiaVal] = [];
+          }
+          if (!mappaMaterieProfessori[materiaVal].includes(profVal)) {
+            mappaMaterieProfessori[materiaVal].push(profVal);
+          }
+        }
       }
     });
 
     popolaSelettoreSemplice("input-universita", "Seleziona l'ateneo...", universitaSet);
     popolaSelettoreSemplice("input-sede", "Scegli polo...", sediSet);
-    popolaSelettoreSemplice("select-materia", "Scegli la materia...", materieSet);
-    popolaSelettoreSemplice("select-professore", "Scegli il docente...", professoriSet);
+    
+    // Popola il menu delle materie con le chiavi uniche estratte
+    popolaSelettoreSemplice("select-materia", "Scegli la materia...", Object.keys(mappaMaterieProfessori));
 
     document.getElementById("onboarding-loading").classList.add("hidden");
     document.getElementById("form-onboarding").classList.remove("hidden");
@@ -322,10 +348,28 @@ async function inizializzaOpzioniOnboarding() {
   }
 }
 
-function popolaSelettoreSemplice(id, placeholder, setDati) {
+// Evento per aggiornare i Professori solo quando cambia la Materia
+document.getElementById("select-materia").addEventListener("change", (e) => {
+  const materiaSelezionata = e.target.value;
+  const selectProf = document.getElementById("select-professore");
+
+  if (materiaSelezionata && mappaMaterieProfessori[materiaSelezionata]) {
+    selectProf.disabled = false;
+    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent";
+    
+    const listaProf = mappaMaterieProfessori[materiaSelezionata];
+    popolaSelettoreSemplice("select-professore", "Scegli il docente...", listaProf);
+  } else {
+    selectProf.disabled = true;
+    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed";
+    selectProf.innerHTML = '<option value="" disabled selected>Scegli prima una materia...</option>';
+  }
+});
+
+function popolaSelettoreSemplice(id, placeholder, dati) {
   const select = document.getElementById(id);
   select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
-  Array.from(setDati).sort().forEach(val => {
+  Array.from(dati).sort().forEach(val => {
     const opt = document.createElement("option");
     opt.value = val; opt.textContent = val;
     select.appendChild(opt);
@@ -395,7 +439,16 @@ function aggiornaGraficaListaMaterie() {
 /* =====================================================================
    FASE 3: AGGIUNTA NUOVA MATERIA AL PROFILO MULTIPLO
    ===================================================================== */
-document.getElementById("btn-apri-aggiungi").addEventListener("click", () => mostraSchermata("aggiungiMateria"));
+document.getElementById("btn-apri-aggiungi").addEventListener("click", () => {
+  // Resetta il form e blocca di nuovo il campo prof all'apertura
+  document.getElementById("form-aggiungi-materia").reset();
+  const selectProf = document.getElementById("select-professore");
+  selectProf.disabled = true;
+  selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed";
+  selectProf.innerHTML = '<option value="" disabled selected>Scegli prima una materia...</option>';
+  
+  mostraSchermata("aggiungiMateria");
+});
 document.getElementById("btn-annulla-materia").addEventListener("click", () => mostraSchermata("dashboard"));
 
 document.getElementById("form-aggiungi-materia").addEventListener("submit", async (e) => {
