@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Match Accademico - Lab</title>
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;600;700&family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
 
@@ -53,7 +51,6 @@
 
   <div class="max-w-md mx-auto min-h-screen bg-paper shadow-2xl relative overflow-x-hidden">
 
-    <!-- Header -->
     <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/5 px-5 pt-5 pb-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-accent flex items-center justify-center text-white font-display font-bold text-sm">MA</div>
@@ -64,7 +61,6 @@
       </button>
     </header>
 
-    <!-- 1. Schermata di Onboarding (Anagrafica Unica con Sede Svincolata) -->
     <section id="screen-onboarding" class="px-6 pt-6 pb-10 hidden">
       <h1 class="text-2xl font-display font-bold leading-tight mb-1">Crea il tuo profilo<br>Accademico</h1>
       <p class="text-ink/60 text-sm mb-6">Inserisci i tuoi dati una sola volta per accedere alla tua Dashboard ed entrare in contatto con altri studenti.</p>
@@ -118,7 +114,6 @@
       </form>
     </section>
 
-    <!-- 2. Schermata Dashboard (Home Personale) -->
     <section id="screen-dashboard" class="px-5 pt-4 pb-10 hidden">
       <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm mb-6 card-in">
         <h2 class="text-xl font-display font-bold mb-1">Bentornato, <span id="dash-username"></span>! 🎓</h2>
@@ -139,7 +134,6 @@
       <div id="lista-materie-utenti" class="space-y-3"></div>
     </section>
 
-    <!-- 3. Schermata per Aggiungere un Esame (Modulo Condizionale Smart) -->
     <section id="screen-aggiungi-materia" class="px-5 pt-4 pb-10 hidden">
       <button id="btn-annulla-materia" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Annulla e torna alla Home</button>
       <h2 class="text-xl font-display font-bold mb-4">Aggiungi un Esame alla tua Dashboard</h2>
@@ -172,7 +166,6 @@
       </form>
     </section>
 
-    <!-- 4. Schermata dell'Hub della Materia (Buddy e Quiz) -->
     <section id="screen-hub" class="px-5 pt-4 pb-24 hidden">
       <button id="btn-torna-dash" class="text-sm text-accent font-semibold mb-3 hover:underline">← Torna alla tua Home</button>
       
@@ -192,7 +185,6 @@
         <div id="buddy-list" class="space-y-3"></div>
       </div>
 
-      <!-- Quiz Card -->
       <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz</h2>
@@ -204,7 +196,6 @@
       </div>
     </section>
 
-    <!-- 5. Schermata del Quiz -->
     <section id="screen-quiz" class="px-5 pt-4 pb-10 hidden">
       <div class="flex items-center justify-between mb-3">
         <button id="btn-quiz-exit" class="text-sm text-ink/40 hover:text-ink/70">← Esci</button>
@@ -220,7 +211,6 @@
       <p id="quiz-feedback" class="hidden text-center text-sm font-semibold mt-2"></p>
     </section>
 
-    <!-- 6. Schermata Risultati del Quiz -->
     <section id="screen-quiz-results" class="px-6 pt-10 pb-10 hidden text-center">
       <div class="text-5xl mb-4">🏆</div>
       <h2 class="font-display font-bold text-2xl mb-1">Quiz completato!</h2>
@@ -244,7 +234,7 @@
 /* =====================================================================
    CONFIGURAZIONE LINK DATABASE (DIRETTI GOOGLE SPREADSHEET)
    ===================================================================== */
-const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbzfmvgouUofxJg1f3PSHdtfKgvV_XqxmYaAH_RBQixsO9zIIcUxPXwGjImRzAjD0IPUKg/exec"; 
+const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbcf0k1mPLHinsadu_0wH0UNrWNifvm_JP49d26RZaM4wWEejdxb4Bnhu-_QWQ7rSNGQg/exec"; 
 
 const URL_SHEET_ISCRITTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json";
 const URL_SHEET_OPZIONI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=Opzioni";
