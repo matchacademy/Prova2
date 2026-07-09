@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Match Accademico - Lab</title>
 
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;600;700&family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
 
@@ -51,6 +53,7 @@
 
   <div class="max-w-md mx-auto min-h-screen bg-paper shadow-2xl relative overflow-x-hidden">
 
+    <!-- Header -->
     <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/5 px-5 pt-5 pb-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-accent flex items-center justify-center text-white font-display font-bold text-sm">MA</div>
@@ -61,9 +64,55 @@
       </button>
     </header>
 
+    <!-- 0. Schermata di Benvenuto (Scelta tra Login e Registrazione) -->
+    <section id="screen-welcome" class="px-6 pt-12 pb-10 text-center hidden">
+      <div class="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-white font-display font-bold text-2xl mx-auto mb-6 shadow-md animate-bounce">MA</div>
+      <h1 class="text-3xl font-display font-bold leading-tight mb-2">Match Accademico</h1>
+      <p class="text-ink/60 text-sm mb-10">Trova compagni di studio, condividi il tuo percorso universitario e sfida la mente con i quiz.</p>
+      
+      <div class="space-y-3">
+        <button id="btn-go-login" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors shadow-sm">
+          Accedi al tuo profilo
+        </button>
+        <button id="btn-go-register" class="w-full bg-white border border-ink/10 hover:bg-gray-50 text-ink font-semibold py-3.5 rounded-2xl transition-colors">
+          Crea un nuovo profilo
+        </button>
+      </div>
+    </section>
+
+    <!-- 0.1 Schermata di Login -->
+    <section id="screen-login" class="px-6 pt-6 pb-10 hidden">
+      <button id="btn-back-welcome-1" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Indietro</button>
+      <h1 class="text-2xl font-display font-bold leading-tight mb-1">Bentornato!</h1>
+      <p class="text-ink/60 text-sm mb-6">Inserisci le tue credenziali per entrare.</p>
+
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1" for="login-username">Username Telegram</label>
+          <div class="flex items-center rounded-2xl border border-ink/10 bg-white focus-within:ring-2 focus-within:ring-accent overflow-hidden">
+            <span class="pl-4 text-ink/40">@</span>
+            <input id="login-username" type="text" required placeholder="tuo_username" class="w-full py-3 pr-4 pl-1 bg-transparent outline-none text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-1" for="login-password">Password</label>
+          <input id="login-password" type="password" required placeholder="••••••••" class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent">
+        </div>
+
+        <div id="login-error-msg" class="text-coral text-xs font-semibold hidden text-center"></div>
+
+        <button type="submit" id="btn-accedi-submit" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors mt-2">
+          Accedi
+        </button>
+      </form>
+    </section>
+
+    <!-- 1. Schermata di Onboarding (Registrazione) -->
     <section id="screen-onboarding" class="px-6 pt-6 pb-10 hidden">
-      <h1 class="text-2xl font-display font-bold leading-tight mb-1">Crea il tuo profilo<br>Accademico</h1>
-      <p class="text-ink/60 text-sm mb-6">Inserisci i tuoi dati una sola volta per accedere alla tua Dashboard ed entrare in contatto con altri studenti.</p>
+      <button id="btn-back-welcome-2" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Indietro</button>
+      <h1 class="text-2xl font-display font-bold leading-tight mb-1">Crea il tuo profilo</h1>
+      <p class="text-ink/60 text-sm mb-6">Inserisci i tuoi dati ed imposta una password per non perdere il tuo account.</p>
 
       <div id="onboarding-loading" class="text-center py-8 text-sm text-ink/50">
         <p>Caricamento opzioni universitarie in corso...</p>
@@ -76,6 +125,11 @@
             <span class="pl-4 text-ink/40">@</span>
             <input id="input-username" type="text" required placeholder="tuo_username" class="w-full py-3 pr-4 pl-1 bg-transparent outline-none text-sm">
           </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-1" for="input-password">Scegli una Password</label>
+          <input id="input-password" type="password" required minlength="4" placeholder="Almeno 4 caratteri (lettere/numeri)" class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent">
         </div>
 
         <div>
@@ -108,12 +162,15 @@
           </select>
         </div>
 
+        <div id="register-error-msg" class="text-coral text-xs font-semibold hidden text-center"></div>
+
         <button type="submit" id="btn-registrati" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors mt-2">
           Completa Registrazione
         </button>
       </form>
     </section>
 
+    <!-- 2. Schermata Dashboard (Home Personale) -->
     <section id="screen-dashboard" class="px-5 pt-4 pb-10 hidden">
       <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm mb-6 card-in">
         <h2 class="text-xl font-display font-bold mb-1">Bentornato, <span id="dash-username"></span>! 🎓</h2>
@@ -134,6 +191,7 @@
       <div id="lista-materie-utenti" class="space-y-3"></div>
     </section>
 
+    <!-- 3. Schermata per Aggiungere un Esame -->
     <section id="screen-aggiungi-materia" class="px-5 pt-4 pb-10 hidden">
       <button id="btn-annulla-materia" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Annulla e torna alla Home</button>
       <h2 class="text-xl font-display font-bold mb-4">Aggiungi un Esame alla tua Dashboard</h2>
@@ -166,6 +224,7 @@
       </form>
     </section>
 
+    <!-- 4. Schermata dell'Hub della Materia (Buddy e Quiz) -->
     <section id="screen-hub" class="px-5 pt-4 pb-24 hidden">
       <button id="btn-torna-dash" class="text-sm text-accent font-semibold mb-3 hover:underline">← Torna alla tua Home</button>
       
@@ -185,6 +244,7 @@
         <div id="buddy-list" class="space-y-3"></div>
       </div>
 
+      <!-- Quiz Card -->
       <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz</h2>
@@ -196,6 +256,7 @@
       </div>
     </section>
 
+    <!-- 5. Schermata del Quiz -->
     <section id="screen-quiz" class="px-5 pt-4 pb-10 hidden">
       <div class="flex items-center justify-between mb-3">
         <button id="btn-quiz-exit" class="text-sm text-ink/40 hover:text-ink/70">← Esci</button>
@@ -211,6 +272,7 @@
       <p id="quiz-feedback" class="hidden text-center text-sm font-semibold mt-2"></p>
     </section>
 
+    <!-- 6. Schermata Risultati del Quiz -->
     <section id="screen-quiz-results" class="px-6 pt-10 pb-10 hidden text-center">
       <div class="text-5xl mb-4">🏆</div>
       <h2 class="font-display font-bold text-2xl mb-1">Quiz completato!</h2>
@@ -234,9 +296,8 @@
 /* =====================================================================
    CONFIGURAZIONE LINK DATABASE (DIRETTI GOOGLE SPREADSHEET)
    ===================================================================== */
-const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyU87t4qj_8Ntx8-6mVXJrZBd5HU6jiNgy2RKmOikz8fjlCgRj5OB3aG7YazoHAAOEysw/exec"; 
+const URL_GOOGLE_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbcf0k1mPLHinsadu_0wH0UNrWNifvm_JP49d26RZaM4wWEejdxb4Bnhu-_QWQ7rSNGQg/exec"; 
 
-const URL_SHEET_ISCRITTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json";
 const URL_SHEET_OPZIONI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=opzioni";
 const URL_SHEET_QUIZ = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=quiz";
 const URL_SHEET_MATERIE_UTENTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=Materie_Utenti";
@@ -259,6 +320,8 @@ let quizRispostaBloccata = false;
 let materiaHubAttiva = null;
 
 const SCHERMATE = {
+  welcome: document.getElementById("screen-welcome"),
+  login: document.getElementById("screen-login"),
   onboarding: document.getElementById("screen-onboarding"),
   dashboard: document.getElementById("screen-dashboard"),
   aggiungiMateria: document.getElementById("screen-aggiungi-materia"),
@@ -273,8 +336,20 @@ function mostraSchermata(nome) {
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
+/* NAVEGAZIONE SCHERMATE INIZIALI */
+document.getElementById("btn-go-login").addEventListener("click", () => {
+  document.getElementById("login-error-msg").classList.add("hidden");
+  mostraSchermata("login");
+});
+document.getElementById("btn-go-register").addEventListener("click", () => {
+  document.getElementById("register-error-msg").classList.add("hidden");
+  mostraSchermata("onboarding");
+});
+document.getElementById("btn-back-welcome-1").addEventListener("click", () => mostraSchermata("welcome"));
+document.getElementById("btn-back-welcome-2").addEventListener("click", () => mostraSchermata("welcome"));
+
 /* =====================================================================
-   FASE 1: ONBOARDING / LOGIN INIZIALE
+   FASE 1: DOWNLOAD OPZIONI ED INIZIALIZZAZIONE FORM
    ===================================================================== */
 async function inizializzaOpzioniOnboarding() {
   try {
@@ -292,32 +367,20 @@ async function inizializzaOpzioniOnboarding() {
 
     righe.forEach(riga => {
       const c = riga?.c || []; 
-      
       if (c[0]?.v) {
         const uniVal = c[0].v.toString().trim();
-        if (uniVal.toLowerCase() !== "universita" && uniVal.toLowerCase() !== "università") {
-          universitaSet.add(uniVal);
-        }
+        if (uniVal.toLowerCase() !== "universita" && uniVal.toLowerCase() !== "università") universitaSet.add(uniVal);
       }
-      
       if (c[3]?.v) {
         const sedeVal = c[3].v.toString().trim();
-        if (sedeVal.toLowerCase() !== "sede") {
-          sediSet.add(sedeVal);
-        }
+        if (sedeVal.toLowerCase() !== "sede") sediSet.add(sedeVal);
       }
-
       if (c[1]?.v && c[2]?.v) {
         const materiaVal = c[1].v.toString().trim();
         const profVal = c[2].v.toString().trim();
-
         if (materiaVal.toLowerCase() !== "materia" && profVal.toLowerCase() !== "professore") {
-          if (!mappaMaterieProfessori[materiaVal]) {
-            mappaMaterieProfessori[materiaVal] = [];
-          }
-          if (!mappaMaterieProfessori[materiaVal].includes(profVal)) {
-            mappaMaterieProfessori[materiaVal].push(profVal);
-          }
+          if (!mappaMaterieProfessori[materiaVal]) mappaMaterieProfessori[materiaVal] = [];
+          if (!mappaMaterieProfessori[materiaVal].includes(profVal)) mappaMaterieProfessori[materiaVal].push(profVal);
         }
       }
     });
@@ -336,16 +399,13 @@ async function inizializzaOpzioniOnboarding() {
 document.getElementById("select-materia").addEventListener("change", (e) => {
   const materiaSelezionata = e.target.value;
   const selectProf = document.getElementById("select-professore");
-
   if (materiaSelezionata && mappaMaterieProfessori[materiaSelezionata]) {
     selectProf.disabled = false;
     selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent";
-    
-    const listaProf = mappaMaterieProfessori[materiaSelezionata];
-    popolaSelettoreSemplice("select-professore", "Scegli il docente...", listaProf);
+    popolaSelettoreSemplice("select-professore", "Scegli il docente...", mappaMaterieProfessori[materiaSelezionata]);
   } else {
     selectProf.disabled = true;
-    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm focus:ring-2 focus:ring-accent disabled:opacity-50 disabled:cursor-not-allowed";
+    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed";
     selectProf.innerHTML = '<option value="" disabled selected>Scegli prima una materia...</option>';
   }
 });
@@ -360,14 +420,72 @@ function popolaSelettoreSemplice(id, placeholder, dati) {
   });
 }
 
+/* =====================================================================
+   FASE 1.1: PROCESSO DI LOGIN SU GOOGLE SHEETS
+   ===================================================================== */
+document.getElementById("form-login").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById("btn-accedi-submit");
+  const errBox = document.getElementById("login-error-msg");
+  btn.disabled = true; btn.textContent = "Verifica in corso...";
+  errBox.classList.add("hidden");
+
+  const username = document.getElementById("login-username").value.trim().replace(/^@/, "");
+  const password = document.getElementById("login-password").value;
+
+  const formData = new URLSearchParams();
+  formData.append("action", "login");
+  formData.append("username", username);
+  formData.append("password", password);
+
+  try {
+    const res = await fetch(URL_GOOGLE_APPS_SCRIPT, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString()
+    });
+    const data = await res.json();
+
+    if (data.status === "success") {
+      utenteLoggato = data.user;
+      localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
+      document.getElementById("btn-logout").classList.remove("hidden");
+      
+      await caricaDatiMaterieLocaliEDb();
+      // Filtriamo le materie dell'utente recuperate dal db remoto
+      elencoMaterieUtente = databaseTuttiIscritti.filter(x => x.username.toLowerCase() === utenteLoggato.username.toLowerCase());
+      localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
+      
+      apriDashboardHome();
+    } else {
+      errBox.textContent = data.message || "Errore durante il login.";
+      errBox.classList.remove("hidden");
+    }
+  } catch (err) {
+    errBox.textContent = "Errore di connessione al database.";
+    errBox.classList.remove("hidden");
+  } finally {
+    btn.disabled = false; btn.textContent = "Accedi";
+  }
+});
+
+/* =====================================================================
+   FASE 1.2: PROCESSO DI REGISTRAZIONE SU GOOGLE SHEETS
+   ===================================================================== */
 document.getElementById("form-onboarding").addEventListener("submit", async (e) => {
   e.preventDefault();
   const btn = document.getElementById("btn-registrati");
-  btn.disabled = true; btn.textContent = "Sincronizzazione...";
+  const errBox = document.getElementById("register-error-msg");
+  btn.disabled = true; btn.textContent = "Creazione account...";
+  errBox.classList.add("hidden");
 
   const username = document.getElementById("input-username").value.trim().replace(/^@/, "");
-  utenteLoggato = {
+  const password = document.getElementById("input-password").value;
+  
+  const nuovoUtente = {
     username: username,
+    password: password,
     universita: document.getElementById("input-universita").value,
     sede: document.getElementById("input-sede").value,
     eta: document.getElementById("input-eta").value,
@@ -375,32 +493,40 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
   };
 
   const formData = new URLSearchParams();
-  formData.append("username", utenteLoggato.username);
-  formData.append("universita", utenteLoggato.universita);
-  formData.append("sede", utenteLoggato.sede);
-  formData.append("eta", utenteLoggato.eta);
-  formData.append("genere", utenteLoggato.genere);
-  formData.append("materia", "");
-  formData.append("professore", "");
-  formData.append("statoStudio", "");
+  formData.append("action", "register");
+  formData.append("username", nuovoUtente.username);
+  formData.append("password", nuovoUtente.password);
+  formData.append("universita", nuovoUtente.universita);
+  formData.append("sede", nuovoUtente.sede);
+  formData.append("eta", nuovoUtente.eta);
+  formData.append("genere", nuovoUtente.genere);
 
   try {
-    await fetch(URL_GOOGLE_APPS_SCRIPT, {
+    const res = await fetch(URL_GOOGLE_APPS_SCRIPT, {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData.toString()
     });
-  } catch (err) {
-    console.error("Errore salvataggio cloud anagrafica:", err);
-  }
+    const data = await res.json();
 
-  localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
-  document.getElementById("btn-logout").classList.remove("hidden");
-  
-  await caricaDatiMaterieLocaliEDb();
-  btn.disabled = false; btn.textContent = "Completa Registrazione";
-  apriDashboardHome();
+    if (data.status === "success") {
+      utenteLoggato = nuovoUtente;
+      localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
+      document.getElementById("btn-logout").classList.remove("hidden");
+      
+      await caricaDatiMaterieLocaliEDb();
+      apriDashboardHome();
+    } else {
+      errBox.textContent = data.message || "Username già occupato.";
+      errBox.classList.remove("hidden");
+    }
+  } catch (err) {
+    errBox.textContent = "Errore durante la connessione al cloud.";
+    errBox.classList.remove("hidden");
+  } finally {
+    btn.disabled = false; btn.textContent = "Completa Registrazione";
+  }
 });
 
 /* =====================================================================
@@ -409,7 +535,6 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
 function apriDashboardHome() {
   document.getElementById("dash-username").textContent = "@" + utenteLoggato.username;
   document.getElementById("dash-info-profilo").textContent = `${utenteLoggato.universita} (${utenteLoggato.sede}) · ${utenteLoggato.eta} anni · ${utenteLoggato.genere}`;
-  
   aggiornaGraficaListaMaterie();
   mostraSchermata("dashboard");
 }
@@ -450,7 +575,6 @@ document.getElementById("btn-apri-aggiungi").addEventListener("click", () => {
   selectProf.disabled = true;
   selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed";
   selectProf.innerHTML = '<option value="" disabled selected>Scegli prima una materia...</option>';
-  
   mostraSchermata("aggiungiMateria");
 });
 document.getElementById("btn-annulla-materia").addEventListener("click", () => mostraSchermata("dashboard"));
@@ -470,11 +594,8 @@ document.getElementById("form-aggiungi-materia").addEventListener("submit", asyn
   };
 
   const formData = new URLSearchParams();
+  formData.append("action", "add_materia");
   formData.append("username", utenteLoggato.username);
-  formData.append("universita", utenteLoggato.universita);
-  formData.append("sede", utenteLoggato.sede);
-  formData.append("eta", utenteLoggato.eta);
-  formData.append("genere", utenteLoggato.genere);
   formData.append("materia", nuovaMateria.materia);
   formData.append("professore", nuovaMateria.professore);
   formData.append("statoStudio", nuovaMateria.statoStudio);
@@ -495,7 +616,6 @@ document.getElementById("form-aggiungi-materia").addEventListener("submit", asyn
   localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
 
   await caricaDatiMaterieLocaliEDb();
-
   btn.disabled = false; btn.textContent = "Salva materia nel profilo";
   apriDashboardHome();
 });
@@ -510,7 +630,6 @@ function avviaHubMateria(materiaCard) {
   materiaHubAttiva = materiaCard;
   document.getElementById("hub-titolo-materia").textContent = materiaCard.materia;
   document.getElementById("hub-sottotitolo-prof").textContent = `Professore: ${materiaCard.professore} · Stato tuo studio: ${materiaCard.statoStudio}`;
-  
   aggiornaListaBuddyHub();
   mostraSchermata("hub");
 }
@@ -520,9 +639,7 @@ function aggiornaListaBuddyHub() {
   const empty = document.getElementById("buddy-empty");
   const list = document.getElementById("buddy-list");
 
-  loading.classList.add("hidden");
-  empty.classList.add("hidden");
-  list.innerHTML = "";
+  loading.classList.add("hidden"); empty.classList.add("hidden"); list.innerHTML = "";
 
   const matCercata = materiaHubAttiva.materia.toLowerCase().trim();
   const profCercato = materiaHubAttiva.professore.toLowerCase().trim();
@@ -576,7 +693,6 @@ async function caricaDatiMaterieLocaliEDb() {
         professore: (c[4]?.v ?? "").toString().trim()
       };
     }).filter(x => x.username !== "");
-
   } catch (err) {
     console.warn("Impossibile sincronizzare la lista Buddy remota:", err);
   }
@@ -601,7 +717,6 @@ function avviaQuiz() {
       const fine = testo.lastIndexOf("}");
       const json = JSON.parse(testo.substring(inizio, fine + 1));
       const righe = json.table.rows || [];
-
       const materiaFiltro = materiaHubAttiva.materia.trim().toLowerCase();
       
       QUIZ_DOMANDE = righe.map(riga => {
@@ -620,9 +735,7 @@ function avviaQuiz() {
       }).filter(q => q.materia === materiaFiltro && q.domanda !== "");
 
       if (QUIZ_DOMANDE.length === 0) {
-        QUIZ_DOMANDE = [
-          { domanda: "Nessun quiz inserito nel database per questa materia. Aggiungine alcuni su Google Fogli!", opzioni: ["Capito", "-", "-", "-"], corretta: 0 }
-        ];
+        QUIZ_DOMANDE = [{ domanda: "Nessun quiz inserito nel database per questa materia.", opzioni: ["Capito", "-", "-", "-"], corretta: 0 }];
       } else {
         QUIZ_DOMANDE.sort(() => Math.random() - 0.5);
         if (QUIZ_DOMANDE.length > 10) QUIZ_DOMANDE = QUIZ_DOMANDE.slice(0, 10);
@@ -630,7 +743,6 @@ function avviaQuiz() {
 
       quizIndiceCorrente = 0; quizPunteggio = 0;
       btnStart.disabled = false; btnStart.textContent = "Avvia";
-      
       mostraSchermata("quiz");
       mostraDomandaCorrente();
     })
@@ -643,7 +755,6 @@ function avviaQuiz() {
 function mostraDomandaCorrente() {
   quizRispostaBloccata = false;
   const dq = QUIZ_DOMANDE[quizIndiceCorrente];
-  
   document.getElementById("quiz-progress").textContent = `Domanda ${quizIndiceCorrente + 1}/${QUIZ_DOMANDE.length}`;
   document.getElementById("quiz-question").textContent = dq.domanda;
   document.getElementById("quiz-feedback").classList.add("hidden");
@@ -659,7 +770,6 @@ function mostraDomandaCorrente() {
     btn.addEventListener("click", () => rispondiQuiz(ind));
     optionsEl.appendChild(btn);
   });
-
   avviaTimerQuiz();
 }
 
@@ -725,18 +835,16 @@ function escapeHtml(str) {
 
 (async function mainInit() {
   const accountLocale = localStorage.getItem("ma_user");
+  await inizializzaOpzioniOnboarding();
   
   if (accountLocale) { 
     utenteLoggato = JSON.parse(accountLocale); 
     elencoMaterieUtente = JSON.parse(localStorage.getItem("ma_materie_" + utenteLoggato.username)) || [];
     document.getElementById("btn-logout").classList.remove("hidden");
-    
     await caricaDatiMaterieLocaliEDb();
     apriDashboardHome(); 
-    await inizializzaOpzioniOnboarding(); 
   } else { 
-    mostraSchermata("onboarding");
-    await inizializzaOpzioniOnboarding();
+    mostraSchermata("welcome");
   }
 })();
 </script>
