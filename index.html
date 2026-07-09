@@ -459,26 +459,72 @@ document.getElementById("btn-quiz-retry").addEventListener("click", avviaQuiz);
 document.getElementById("btn-quiz-back-hub").addEventListener("click", () => mostraSchermata("hub"));
 document.getElementById("btn-quiz-exit").addEventListener("click", () => { fermaTimerQuiz(); mostraSchermata("hub"); });
 
-function avviaQuiz() { quizIndiceCorrente = 0; quizPunteggio = 0; mostraSchermata("quiz"); mostraDomandaCorrente(); }
+function avviaQuiz() {
+  const btnStart = document.getElementById("btn-start-quiz");
+  btnStart.disabled = true;
+  btnStart.textContent = "Caricamento...";
 
-function mostraDomandaCorrente() {
-  quizRispostaBloccata = false;
-  const domandaCorrente = QUIZ_DOMANDE[quizIndiceCorrente];
-  document.getElementById("quiz-progress").textContent = `Domanda ${quizIndiceCorrente + 1}/${QUIZ_DOMANDE.length}`;
-  document.getElementById("quiz-question").textContent = domandaCorrente.domanda;
-  document.getElementById("quiz-feedback").classList.add("hidden");
-  
-  const optionsEl = document.getElementById("quiz-options");
-  optionsEl.innerHTML = "";
-  domandaCorrente.opzioni.forEach((opzione, indice) => {
-    const btn = document.createElement("button");
-    btn.className = "quiz-option w-full text-left bg-white border border-ink/10 rounded-2xl px-4 py-3.5 text-sm font-medium hover:border-accent transition-colors";
-    btn.textContent = opzione;
-    btn.addEventListener("click", () => rispondiQuiz(indice));
-    optionsEl.appendChild(btn);
-  });
-  avviaTimerQuiz();
+  fetch(URL_SHEET_QUIZ)
+    .then(risposta => {
+      if (!risposta.ok) throw new Error("Impossibile caricare i quiz");
+      return risposta.text();
+    })
+    .then(testo => {
+      const inizio = testo.indexOf("{");
+      const fine = testo.lastIndexOf("}");
+      const json = JSON.parse(testo.substring(inizio, fine + 1));
+      const righe = json.table.rows || [];
+
+      // Filtriamo le domande: prendiamo solo quelle della materia dell'utente corrente
+      const materiaSelezionata = utenteCorrente.materia.trim().toLowerCase();
+      
+      QUIZ_DOMANDE = righe.map(riga => {
+        const c = riga?.c || [];
+        return {
+          materia: (c[0]?.v ?? "").toString().trim().toLowerCase(),
+          domanda: (c[1]?.v ?? "").toString(),
+          opzioni: [
+            (c[2]?.v ?? "").toString(),
+            (c[3]?.v ?? "").toString(),
+            (c[4]?.v ?? "").toString(),
+            (c[5]?.v ?? "").toString()
+          ],
+          corretta: parseInt(c[6]?.v ?? 0, 10)
+        };
+      }).filter(q => q.materia === materiaSelezionata && q.domanda !== "");
+
+      // Se non ci sono quiz per questa materia, carichiamo una domanda di avviso
+      if (QUIZ_DOMANDE.length === 0) {
+        QUIZ_DOMANDE = [
+          { domanda: "Nessun quiz inserito nel database per questa materia. Contatta l'amministratore!", opzioni: ["Ok", "-", "-", "-"], corretta: 0 }
+        ];
+      }
+
+      // Mescola le domande in modo casuale
+      QUIZ_DOMANDE.sort(() => Math.random() - 0.5);
+      
+      // Limitiamo il quiz a un massimo di 10 domande alla volta
+      if (QUIZ_DOMANDE.length > 10) {
+        QUIZ_DOMANDE = QUIZ_DOMANDE.slice(0, 10);
+      }
+
+      quizIndiceCorrente = 0;
+      quizPunteggio = 0;
+      
+      btnStart.disabled = false;
+      btnStart.textContent = "Avvia";
+      
+      mostraSchermata("quiz");
+      mostraDomandaCorrente();
+    })
+    .catch(error => {
+      console.error("Errore nel caricamento dei quiz:", error);
+      alert("Errore nel caricamento dell'Arena dei Quiz. Riprova tra poco.");
+      btnStart.disabled = false;
+      btnStart.textContent = "Avvia";
+    });
 }
+
 
 function avviaTimerQuiz() { fermaTimerQuiz(); quizSecondiRimasti = SECONDI_PER_DOMANDA; aggiornaBarraTimer(); quizTimerInterval = setInterval(() => { quizSecondiRimasti -= 1; aggiornaBarraTimer(); if (quizSecondiRimasti <= 0) { fermaTimerQuiz(); rispondiQuiz(null); } }, 1000); }
 function fermaTimerQuiz() { if (quizTimerInterval) { clearInterval(quizTimerInterval); quizTimerInterval = null; } }
