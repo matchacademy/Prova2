@@ -380,6 +380,24 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
     genere: document.getElementById("input-genere").value
   };
 
+  // --- AGGIUNTA: Inviamo l'anagrafica al database subito alla registrazione ---
+  try {
+    await fetch(URL_GOOGLE_APPS_SCRIPT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...utenteLoggato,
+        materia: "", // Inviamo stringhe vuote così Apps Script capisce che è solo anagrafica
+        professore: "",
+        statoStudio: ""
+      })
+    });
+  } catch (err) {
+    console.error("Errore salvataggio anagrafica:", err);
+  }
+  // -------------------------------------------------------------------------
+
   localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
   document.getElementById("btn-logout").classList.remove("hidden");
   
