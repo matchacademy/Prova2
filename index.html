@@ -495,11 +495,21 @@ async function inizializzaOpzioniOnboarding() {
     Object.keys(mappa).forEach(u => uniSelect.innerHTML += `<option value="${u}">${u}</option>`);
 
     uniSelect.addEventListener("change", () => {
-      const corsoSelect = document.getElementById("input-corso");
-      corsoSelect.innerHTML = '<option value="" disabled selected>Seleziona corso...</option>';
-      const corsi = Object.keys(mappa[uniSelect.value] || {});
-      corsi.forEach(c => corsoSelect.innerHTML += `<option value="${c}">${c}</option>`);
-    });
+  // 1. Reset e popolamento Corsi (quello che avevi già fatto)
+  const corsoSelect = document.getElementById("input-corso");
+  corsoSelect.innerHTML = '<option value="" disabled selected>Seleziona corso...</option>';
+  const corsi = Object.keys(mappa[uniSelect.value] || {});
+  corsi.sort().forEach(c => corsoSelect.innerHTML += `<option value="${c}">${c}</option>`);
+
+  // 2. AGGIUNTA: Reset e popolamento Sedi
+  const sedeSelect = document.getElementById("input-sede");
+  sedeSelect.innerHTML = '<option value="" disabled selected>Seleziona sede...</option>';
+  
+  // Supponendo che nel tuo database tu abbia un elenco di sedi associate o fisse
+  // Se le sedi sono fisse per ogni università, puoi gestirle qui:
+  const sedi = ["Palermo", "Caltanissetta", "Trapani"]; // Esempio: personalizza questa lista
+  sedi.forEach(s => sedeSelect.innerHTML += `<option value="${s}">${s}</option>`);
+});
 
     document.getElementById("onboarding-loading").classList.add("hidden");
     document.getElementById("form-onboarding").classList.remove("hidden");
