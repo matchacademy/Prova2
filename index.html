@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Match Accademico - Lab</title>
 
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=500;600;700&family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
 
@@ -51,6 +53,7 @@
 
   <div class="max-w-md mx-auto min-h-screen bg-paper shadow-2xl relative overflow-x-hidden">
 
+    <!-- Header -->
     <header class="sticky top-0 z-30 bg-paper/90 backdrop-blur border-b border-ink/5 px-5 pt-5 pb-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-accent flex items-center justify-center text-white font-display font-bold text-sm">MA</div>
@@ -61,6 +64,7 @@
       </button>
     </header>
 
+    <!-- 0. Schermata di Benvenuto -->
     <section id="screen-welcome" class="px-6 pt-12 pb-10 text-center hidden">
       <div class="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-white font-display font-bold text-2xl mx-auto mb-6 shadow-md animate-bounce">MA</div>
       <h1 class="text-3xl font-display font-bold leading-tight mb-2">Match Accademico</h1>
@@ -76,6 +80,7 @@
       </div>
     </section>
 
+    <!-- 0.1 Schermata di Login -->
     <section id="screen-login" class="px-6 pt-6 pb-10 hidden">
       <button id="btn-back-welcome-1" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Indietro</button>
       <h1 class="text-2xl font-display font-bold leading-tight mb-1">Bentornato!</h1>
@@ -103,6 +108,7 @@
       </form>
     </section>
 
+    <!-- 1. Schermata di Onboarding (Registrazione) -->
     <section id="screen-onboarding" class="px-6 pt-6 pb-10 hidden">
       <button id="btn-back-welcome-2" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Indietro</button>
       <h1 class="text-2xl font-display font-bold leading-tight mb-1">Crea il tuo profilo</h1>
@@ -124,6 +130,15 @@
         <div>
           <label class="block text-sm font-semibold mb-1" for="input-password">Scegli una Password</label>
           <input id="input-password" type="password" required minlength="4" placeholder="Almeno 4 caratteri (lettere/numeri)" class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent">
+        </div>
+
+        <!-- NUOVO CAMPO: DESCRIZIONE BIO BUDDY -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-sm font-semibold" for="input-descrizione">Note / Metodo di studio</label>
+            <span id="bio-char-counter" class="text-[11px] text-ink/40">0/60</span>
+          </div>
+          <input id="input-descrizione" type="text" required maxlength="60" placeholder="Es. studio con le mappe, ripetizione in presenza" class="w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent">
         </div>
 
         <div>
@@ -164,6 +179,7 @@
       </form>
     </section>
 
+    <!-- 2. Schermata Dashboard -->
     <section id="screen-dashboard" class="px-5 pt-4 pb-10 hidden">
       <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm mb-4 card-in flex items-center justify-between">
         <div>
@@ -194,18 +210,18 @@
       <div id="lista-materie-utenti" class="space-y-3"></div>
     </section>
 
+    <!-- 2.1 Schermata Classifica Generale (Leaderboard) -->
     <section id="screen-leaderboard" class="px-5 pt-4 pb-10 hidden">
       <button id="btn-chiudi-leaderboard" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Torna alla Dashboard</button>
       <h2 class="text-2xl font-display font-bold mb-1">🏆 Classifica Generale</h2>
       <p class="text-ink/60 text-sm mb-6">I 10 migliori studenti dell'Arena ordinati per punteggio ELO.</p>
-      
       <div id="leaderboard-loading" class="text-center py-8 text-sm text-ink/50">Caricamento classifica...</div>
-      
       <div id="leaderboard-container" class="bg-white rounded-3xl border border-ink/5 shadow-sm overflow-hidden hidden">
         <div id="leaderboard-list" class="divide-y divide-ink/5"></div>
       </div>
     </section>
 
+    <!-- 3. Schermata per Aggiungere un Esame -->
     <section id="screen-aggiungi-materia" class="px-5 pt-4 pb-10 hidden">
       <button id="btn-annulla-materia" class="text-sm text-ink/40 hover:text-ink/70 mb-4">← Annulla e torna alla Home</button>
       <h2 class="text-xl font-display font-bold mb-4">Aggiungi un Esame alla tua Dashboard</h2>
@@ -238,16 +254,32 @@
       </form>
     </section>
 
+    <!-- 4. Schermata dell'Hub della Materia (CON CAMBIO STATO IN DIRETTA) -->
     <section id="screen-hub" class="px-5 pt-4 pb-24 hidden">
       <button id="btn-torna-dash" class="text-sm text-accent font-semibold mb-3 hover:underline">← Torna alla tua Home</button>
       
-      <div class="bg-white rounded-2xl p-4 border border-ink/5 shadow-sm mb-5">
-        <h2 class="font-display font-bold text-lg text-accent" id="hub-titolo-materia">—</h2>
-        <p class="text-xs text-ink/50 mt-0.5" id="hub-sottotitolo-prof">—</p>
+      <!-- Card Intestazione Materia con Editor di Stato Condizionale -->
+      <div class="bg-white rounded-2xl p-4 border border-ink/5 shadow-sm mb-5 flex flex-col gap-3">
+        <div>
+          <h2 class="font-display font-bold text-lg text-accent" id="hub-titolo-materia">—</h2>
+          <p class="text-xs text-ink/50 mt-0.5" id="hub-sottotitolo-prof">—</p>
+        </div>
+        <!-- Menu Modifica Stato inline -->
+        <div class="border-t border-ink/5 pt-2.5 flex items-center justify-between gap-2">
+          <label for="hub-change-stato" class="text-[11px] font-bold text-ink/50 uppercase">Modifica Stato:</label>
+          <select id="hub-change-stato" class="bg-paper border border-ink/10 rounded-xl px-2.5 py-1 text-xs font-semibold outline-none focus:ring-1 focus:ring-accent">
+            <option value="Inizio studio">Inizio studio 📖</option>
+            <option value="Ripetizione">Ripetizione 🔁</option>
+            <option value="Esame a breve">Esame a breve 🔥</option>
+            <option value="Esame a breve">Esame a breve 🔥</option>
+            <option value="Esame Superato (Rimuovi)">Esame Superato (Rimuovi) ✅</option>
+          </select>
+        </div>
       </div>
 
       <div class="space-y-5">
         
+        <!-- PARTE 1: Buddy Comprimibili -->
         <div class="bg-white rounded-3xl border border-ink/5 shadow-sm overflow-hidden">
           <button id="btn-toggle-buddy" class="w-full p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors outline-none">
             <div class="flex items-center gap-2">
@@ -267,6 +299,7 @@
           </div>
         </div>
 
+        <!-- PARTE 2: Arena dei Quiz -->
         <div class="rounded-3xl bg-ink text-white p-5 flex items-center justify-between gap-4 shadow-md">
           <div>
             <h2 class="font-display font-bold text-lg mb-1">🧠 Arena dei Quiz Competitive</h2>
@@ -277,6 +310,7 @@
           </button>
         </div>
 
+        <!-- PARTE 3: Consigli Extra -->
         <div class="bg-white rounded-3xl p-5 border border-ink/5 shadow-sm">
           <h3 class="font-display font-bold text-base mb-3">💡 Consigli Extra & Domande d'Esame</h3>
           <div id="consigli-loading" class="text-sm text-ink/40 py-4 text-center">Caricamento materiale utile...</div>
@@ -287,6 +321,7 @@
       </div>
     </section>
 
+    <!-- 5. Schermata del Quiz -->
     <section id="screen-quiz" class="px-5 pt-4 pb-10 hidden">
       <div class="flex items-center justify-between mb-3">
         <button id="btn-quiz-exit" class="text-sm text-ink/40 hover:text-ink/70">← Abbandona Match</button>
@@ -302,6 +337,7 @@
       <p id="quiz-feedback" class="hidden text-center text-sm font-semibold mt-2"></p>
     </section>
 
+    <!-- 6. Schermata Risultati del Quiz -->
     <section id="screen-quiz-results" class="px-6 pt-10 pb-10 hidden text-center">
       <div class="text-5xl mb-4">⚔️</div>
       <h2 class="font-display font-bold text-2xl mb-1">Match Concluso!</h2>
@@ -339,6 +375,7 @@ const URL_SHEET_OPZIONI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwy
 const URL_SHEET_QUIZ = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=quiz";
 const URL_SHEET_MATERIE_UTENTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=Materie_Utenti";
 const URL_SHEET_CONSIGLI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json&sheet=consigli";
+const URL_SHEET_ISCRITTI = "https://docs.google.com/spreadsheets/d/12iR7iU0dsGGwyeh8ewhkq0asGDdfbpCizxA_r4hoePs/gviz/tq?tqx=out:json";
 
 /* ---------------------------------------------------------------------
    STATO APPLICAZIONE GLOBALE
@@ -347,6 +384,7 @@ let utenteLoggato = null;
 let elencoMaterieUtente = [];   
 let databaseTuttiIscritti = [];  
 let mappaMaterieProfessori = {}; 
+let dizionarioBioUtenti = {}; // Mappa bio degli iscritti
 let QUIZ_DOMANDE = [];
 const SECONDI_PER_DOMANDA = 20;
 
@@ -391,6 +429,11 @@ document.getElementById("btn-toggle-buddy").addEventListener("click", () => {
   else { content.classList.add("hidden"); arrow.textContent = "▼"; }
 });
 
+/* CONTATORE BIO CARATTERI */
+document.getElementById("input-descrizione").addEventListener("input", (e) => {
+  document.getElementById("bio-char-counter").textContent = `${e.target.value.length}/60`;
+});
+
 /* =====================================================================
    FASE 1: DOWNLOAD DATABASE OPZIONI UNIVERISITÀ
    ===================================================================== */
@@ -399,13 +442,11 @@ async function inizializzaOpzioniOnboarding() {
     const risposta = await fetch(URL_SHEET_OPZIONI);
     if (!risposta.ok) throw new Error();
     const testo = await risposta.text();
-    const inizio = testo.indexOf("{");
-    const fine = testo.lastIndexOf("}");
+    const inizio = testo.indexOf("{"); const fine = testo.lastIndexOf("}");
     const json = JSON.parse(testo.substring(inizio, fine + 1));
     const righe = json.table.rows || [];
 
-    let universitaSet = new Set();
-    let sediSet = new Set();
+    let universitaSet = new Set(); let sediSet = new Set();
     mappaMaterieProfessori = {}; 
 
     righe.forEach(riga => {
@@ -434,21 +475,17 @@ async function inizializzaOpzioniOnboarding() {
 
     document.getElementById("onboarding-loading").classList.add("hidden");
     document.getElementById("form-onboarding").classList.remove("hidden");
-  } catch (err) {
-    document.getElementById("onboarding-loading").innerHTML = "<p class='text-coral text-sm'>Errore cloud server. Riprova.</p>";
-  }
+  } catch (err) { document.getElementById("onboarding-loading").innerHTML = "<p class='text-coral text-sm'>Errore cloud server. Riprova.</p>"; }
 }
 
 document.getElementById("select-materia").addEventListener("change", (e) => {
   const materiaSelezionata = e.target.value;
   const selectProf = document.getElementById("select-professore");
   if (materiaSelezionata && mappaMaterieProfessori[materiaSelezionata]) {
-    selectProf.disabled = false;
-    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent";
+    selectProf.disabled = false; selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-white outline-none text-sm focus:ring-2 focus:ring-accent";
     popolaSelettoreSemplice("select-professore", "Scegli il docente...", mappaMaterieProfessori[materiaSelezionata]);
   } else {
-    selectProf.disabled = true;
-    selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed";
+    selectProf.disabled = true; selectProf.className = "w-full py-3 px-4 rounded-2xl border border-ink/10 bg-gray-100 outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed";
     selectProf.innerHTML = '<option value="" disabled selected>Scegli prima una materia...</option>';
   }
 });
@@ -458,8 +495,7 @@ function popolaSelettoreSemplice(id, placeholder, dati) {
   select.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
   Array.from(dati).sort().forEach(val => {
     const opt = document.createElement("option");
-    opt.value = val; opt.textContent = val;
-    select.appendChild(opt);
+    opt.value = val; opt.textContent = val; select.appendChild(opt);
   });
 }
 
@@ -470,8 +506,7 @@ document.getElementById("form-login").addEventListener("submit", async (e) => {
   e.preventDefault();
   const btn = document.getElementById("btn-accedi-submit");
   const errBox = document.getElementById("login-error-msg");
-  btn.disabled = true; btn.textContent = "Verifica account...";
-  errBox.classList.add("hidden");
+  btn.disabled = true; btn.textContent = "Verifica account..."; errBox.classList.add("hidden");
 
   const username = document.getElementById("login-username").value.trim().replace(/^@/, "");
   const password = document.getElementById("login-password").value;
@@ -483,10 +518,7 @@ document.getElementById("form-login").addEventListener("submit", async (e) => {
 
   try {
     const res = await fetch(URL_GOOGLE_APPS_SCRIPT, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString()
+      method: "POST", mode: "cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: formData.toString()
     });
     const data = await res.json();
 
@@ -498,18 +530,10 @@ document.getElementById("form-login").addEventListener("submit", async (e) => {
       await caricaDatiMaterieLocaliEDb();
       elencoMaterieUtente = databaseTuttiIscritti.filter(x => x.username.toLowerCase() === utenteLoggato.username.toLowerCase());
       localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
-      
       apriDashboardHome();
-    } else {
-      errBox.textContent = data.message || "Errore di accesso.";
-      errBox.classList.remove("hidden");
-    }
-  } catch (err) {
-    errBox.textContent = "Errore di connessione cloud.";
-    errBox.classList.remove("hidden");
-  } finally {
-    btn.disabled = false; btn.textContent = "Accedi";
-  }
+    } else { errBox.textContent = data.message || "Errore di accesso."; errBox.classList.remove("hidden"); }
+  } catch (err) { errBox.textContent = "Errore di connessione cloud."; errBox.classList.remove("hidden"); } 
+  finally { btn.disabled = false; btn.textContent = "Accedi"; }
 });
 
 /* =====================================================================
@@ -519,16 +543,14 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
   e.preventDefault();
   const btn = document.getElementById("btn-registrati");
   const errBox = document.getElementById("register-error-msg");
-  btn.disabled = true; btn.textContent = "Generazione ELO...";
-  errBox.classList.add("hidden");
+  btn.disabled = true; btn.textContent = "Generazione ELO..."; errBox.classList.add("hidden");
 
   const username = document.getElementById("input-username").value.trim().replace(/^@/, "");
   const password = document.getElementById("input-password").value;
+  const descrizione = document.getElementById("input-descrizione").value.trim();
   
   const nuovoUtente = {
-    username: username,
-    elo: 1000,
-    password: password,
+    username: username, elo: 1000, password: password, descrizione: descrizione,
     universita: document.getElementById("input-universita").value,
     sede: document.getElementById("input-sede").value,
     eta: document.getElementById("input-eta").value,
@@ -539,6 +561,7 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
   formData.append("action", "register");
   formData.append("username", nuovoUtente.username);
   formData.append("password", nuovoUtente.password);
+  formData.append("descrizione", nuovoUtente.descrizione);
   formData.append("universita", nuovoUtente.universita);
   formData.append("sede", nuovoUtente.sede);
   formData.append("eta", nuovoUtente.eta);
@@ -546,10 +569,7 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
 
   try {
     const res = await fetch(URL_GOOGLE_APPS_SCRIPT, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString()
+      method: "POST", mode: "cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: formData.toString()
     });
     const data = await res.json();
 
@@ -559,16 +579,9 @@ document.getElementById("form-onboarding").addEventListener("submit", async (e) 
       document.getElementById("btn-logout").classList.remove("hidden");
       await caricaDatiMaterieLocaliEDb();
       apriDashboardHome();
-    } else {
-      errBox.textContent = data.message || "Username già occupato.";
-      errBox.classList.remove("hidden");
-    }
-  } catch (err) {
-    errBox.textContent = "Errore durante la connessione al database.";
-    errBox.classList.remove("hidden");
-  } finally {
-    btn.disabled = false; btn.textContent = "Completa Registrazione";
-  }
+    } else { errBox.textContent = data.message || "Username già occupato."; errBox.classList.remove("hidden"); }
+  } catch (err) { errBox.textContent = "Errore durante la connessione al database."; errBox.classList.remove("hidden"); } 
+  finally { btn.disabled = false; btn.textContent = "Completa Registrazione"; }
 });
 
 /* =====================================================================
@@ -578,7 +591,6 @@ function apriDashboardHome() {
   document.getElementById("dash-username").textContent = "@" + utenteLoggato.username;
   document.getElementById("dash-info-profilo").textContent = `${utenteLoggato.universita} (${utenteLoggato.sede})`;
   document.getElementById("dash-user-elo").textContent = utenteLoggato.elo + " 🏆";
-  
   aggiornaGraficaListaMaterie();
   mostraSchermata("dashboard");
 }
@@ -608,51 +620,34 @@ function aggiornaGraficaListaMaterie() {
 }
 
 /* =====================================================================
-   FASE 2.1: RENDERING DELLA CLASSIFICA GENERALE (LEADERBOARD)
+   FASE 2.1: RENDERING DELLA CLASSIFICA GENERALE
    ===================================================================== */
 async function apriLeaderboardGenerale() {
   mostraSchermata("leaderboard");
   const loading = document.getElementById("leaderboard-loading");
   const container = document.getElementById("leaderboard-container");
   const list = document.getElementById("leaderboard-list");
-  
-  loading.classList.remove("hidden");
-  container.classList.add("hidden");
-  list.innerHTML = "";
+  loading.classList.remove("hidden"); container.classList.add("hidden"); list.innerHTML = "";
 
   try {
     const res = await fetch(URL_GOOGLE_APPS_SCRIPT + "?action=get_leaderboard");
     const data = await res.json();
-
     if (data.status === "success" && data.leaderboard) {
-      loading.classList.add("hidden");
-      container.classList.remove("hidden");
-
+      loading.classList.add("hidden"); container.classList.remove("hidden");
       data.leaderboard.forEach((st, idx) => {
         let podioIcon = `${idx + 1}°`;
-        if (idx === 0) podioIcon = "🥇";
-        if (idx === 1) podioIcon = "🥈";
-        if (idx === 2) podioIcon = "🥉";
-
+        if (idx === 0) podioIcon = "🥇"; if (idx === 1) podioIcon = "🥈"; if (idx === 2) podioIcon = "🥉";
         const riga = document.createElement("div");
         riga.className = `p-4 flex items-center justify-between text-sm ${st.username.toLowerCase() === utenteLoggato.username.toLowerCase() ? 'bg-accent/5 font-bold' : ''}`;
-        riga.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="w-6 text-center font-display font-bold">${podioIcon}</span>
-            <span class="text-ink">@${escapeHtml(st.username)}</span>
-          </div>
-          <span class="font-display font-bold text-mint">${st.elo} pts</span>
-        `;
+        riga.innerHTML = `<div class="flex items-center gap-3"><span class="w-6 text-center font-bold">${podioIcon}</span><span>@${escapeHtml(st.username)}</span></div><span class="font-bold text-mint">${st.elo} pts</span>`;
         list.appendChild(riga);
       });
     }
-  } catch (err) {
-    loading.textContent = "Impossibile scaricare la classifica generale.";
-  }
+  } catch (err) { loading.textContent = "Impossibile scaricare la classifica."; }
 }
 
 /* =====================================================================
-   FASE 3: AGGIUNTA NUOVA MATERIA AL PROFILO MULTIPLO
+   FASE 3: AGGIUNTA NUOVA MATERIA
    ===================================================================== */
 document.getElementById("btn-apri-aggiungi").addEventListener("click", () => {
   document.getElementById("form-aggiungi-materia").reset();
@@ -684,39 +679,95 @@ document.getElementById("form-aggiungi-materia").addEventListener("submit", asyn
 
   try {
     await fetch(URL_GOOGLE_APPS_SCRIPT, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString()
+      method: "POST", mode: "cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: formData.toString()
     });
   } catch (err) { console.error(err); }
 
   elencoMaterieUtente = elencoMaterieUtente.filter(m => m.materia.toLowerCase() !== nuovaMateria.materia.toLowerCase());
   elencoMaterieUtente.push(nuovaMateria);
   localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
-
   await caricaDatiMaterieLocaliEDb();
   btn.disabled = false; btn.textContent = "Salva materia nel profilo";
   apriDashboardHome();
 });
 
 /* =====================================================================
-   FASE 4: HUB INTERNO DELLA MATERIA (BUDDY & CONSIGLI)
+   FASE 4: HUB INTERNO DELLA MATERIA (BUDDY CON BIO & MODIFICA STATO IN DIRETTA)
    ===================================================================== */
 document.getElementById("btn-torna-dash").addEventListener("click", apriDashboardHome);
-document.getElementById("btn-refresh-buddies").addEventListener("click", () => caricaDatiMaterieLocaliEDb().then(aggiornaListaBuddyHub));
+document.getElementById("btn-refresh-buddies").addEventListener("click", () => scaricaDizionarioBioEdAggiornaBuddies());
 
 function avviaHubMateria(materiaCard) {
   materiaHubAttiva = materiaCard;
   document.getElementById("hub-titolo-materia").textContent = materiaCard.materia;
-  document.getElementById("hub-sottotitolo-prof").textContent = `Professore: ${materiaCard.professore} · Stato tuo studio: ${materiaCard.statoStudio}`;
+  document.getElementById("hub-sottotitolo-prof").textContent = `Professore: ${materiaCard.professore} · Rango: ${materiaCard.statoStudio}`;
   
+  document.getElementById("hub-change-stato").value = materiaCard.statoStudio;
   document.getElementById("buddy-collapse-content").classList.add("hidden");
   document.getElementById("buddy-arrow").textContent = "▼";
 
-  aggiornaListaBuddyHub();
+  scaricaDizionarioBioEdAggiornaBuddies();
   caricaEVisualizzaConsigliExtra();
   mostraSchermata("hub");
+}
+
+/* LISTENER CAMBIO STATO ESAME O RIMOZIONE COMPLETATO (NOVITÀ) */
+document.getElementById("hub-change-stato").addEventListener("change", async (e) => {
+  const nuovoStato = e.target.value;
+  const selectMenu = e.target;
+  selectMenu.disabled = true;
+
+  const formData = new URLSearchParams();
+  formData.append("action", "update_materia");
+  formData.append("username", utenteLoggato.username);
+  formData.append("materia", materiaHubAttiva.materia);
+  formData.append("statoStudio", nuovoStato);
+
+  try {
+    await fetch(URL_GOOGLE_APPS_SCRIPT, {
+      method: "POST", mode: "cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: formData.toString()
+    });
+
+    if (nuovoStato === "Esame Superato (Rimuovi)") {
+      // Elimina localmente ed esce nella Home
+      elencoMaterieUtente = elencoMaterieUtente.filter(m => m.materia.toLowerCase() !== materiaHubAttiva.materia.toLowerCase());
+      localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
+      await caricaDatiMaterieLocaliEDb();
+      selectMenu.disabled = false;
+      apriDashboardHome();
+    } else {
+      // Aggiorna lo stato in diretta nell'interfaccia
+      materiaHubAttiva.statoStudio = nuovoStato;
+      document.getElementById("hub-sottotitolo-prof").textContent = `Professore: ${materiaHubAttiva.professore} · Rango: ${nuovoStato}`;
+      elencoMaterieUtente.forEach(m => { if(m.materia.toLowerCase() === materiaHubAttiva.materia.toLowerCase()) m.statoStudio = nuovoStato; });
+      localStorage.setItem("ma_materie_" + utenteLoggato.username, JSON.stringify(elencoMaterieUtente));
+      await caricaDatiMaterieLocaliEDb();
+      selectMenu.disabled = false;
+    }
+  } catch (err) { selectMenu.disabled = false; alert("Errore di sincronizzazione stato."); }
+});
+
+/* DOWNLOAD BIOGRAFIE ISCRITTI ED AGGIORNAMENTO LISTA BUDDY (NOVITÀ) */
+async function scaricaDizionarioBioEdAggiornaBuddies() {
+  try {
+    const res = await fetch(URL_SHEET_ISCRITTI);
+    if (res.ok) {
+      const testo = await res.text();
+      const inizio = testo.indexOf("{"); const fine = testo.lastIndexOf("}");
+      const json = JSON.parse(testo.substring(inizio, fine + 1));
+      const righe = json.table.rows || [];
+      dizionarioBioUtenti = {};
+      righe.forEach(r => {
+        const c = r?.c || [];
+        if (c[0]?.v) {
+          // La bio si trova nella nona colonna (Indice 8)
+          dizionarioBioUtenti[c[0].v.toString().toLowerCase().trim()] = c[8]?.v ? c[8].v.toString().trim() : "";
+        }
+      });
+    }
+  } catch(e){}
+  await caricaDatiMaterieLocaliEDb();
+  aggiornaListaBuddyHub();
 }
 
 function aggiornaListaBuddyHub() {
@@ -732,9 +783,7 @@ function aggiornaListaBuddyHub() {
   const ilMioUser = utenteLoggato.username.toLowerCase().trim();
 
   const compagniTrovati = databaseTuttiIscritti.filter(b => 
-    b.materia.toLowerCase().trim() === matCercata &&
-    b.professore.toLowerCase().trim() === profCercato &&
-    b.username.toLowerCase().trim() !== ilMioUser
+    b.materia.toLowerCase().trim() === matCercata && b.professore.toLowerCase().trim() === profCercato && b.username.toLowerCase().trim() !== ilMioUser
   );
 
   if (compagniTrovati.length > 0) { badgeCount.textContent = compagniTrovati.length; badgeCount.classList.remove("hidden"); } 
@@ -743,13 +792,16 @@ function aggiornaListaBuddyHub() {
   if (compagniTrovati.length === 0) { empty.classList.remove("hidden"); return; }
 
   compagniTrovati.forEach((b, i) => {
+    // Recuperiamo la bio personalizzata dal dizionario salvato
+    const bioTrovata = dizionarioBioUtenti[b.username.toLowerCase().trim()] || "Nessuna nota sul metodo inserita.";
     const card = document.createElement("div");
     card.className = "card-in bg-white border border-ink/10 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-sm";
     card.style.animationDelay = (i * 50) + "ms";
     card.innerHTML = `
       <div class="min-w-0">
         <p class="font-semibold truncate">@${escapeHtml(b.username)}</p>
-        <p class="text-xs text-accent font-medium">${escapeHtml(b.statoStudio)}</p>
+        <span class="inline-block text-[10px] font-bold text-accent bg-accent/5 px-1.5 py-0.5 rounded mb-1">${escapeHtml(b.statoStudio)}</span>
+        <p class="text-xs text-ink/60 italic leading-snug truncate">“${escapeHtml(bioTrovata)}”</p>
       </div>
       <a href="https://t.me/${encodeURIComponent(b.username)}" target="_blank" rel="noopener" class="shrink-0 bg-mint/10 text-mint font-semibold text-xs px-3.5 py-2.5 rounded-xl hover:bg-mint/20 transition-colors">Contatta</a>
     `;
@@ -762,11 +814,9 @@ async function caricaDatiMaterieLocaliEDb() {
     const res = await fetch(URL_SHEET_MATERIE_UTENTI);
     if (!res.ok) return;
     const testo = await res.text();
-    const inizio = testo.indexOf("{");
-    const fine = testo.lastIndexOf("}");
+    const inizio = testo.indexOf("{"); const fine = testo.lastIndexOf("}");
     const json = JSON.parse(testo.substring(inizio, fine + 1));
     const righe = json.table.rows || [];
-
     databaseTuttiIscritti = righe.map(r => {
       const c = r?.c || [];
       return {
@@ -797,9 +847,7 @@ async function caricaEVisualizzaConsigliExtra() {
     const consigliTrovati = righe.map(r => {
       const c = r?.c || [];
       return {
-        materia: (c[0]?.v ?? "").toString().trim().toLowerCase(),
-        tipo: (c[1]?.v ?? "").toString().trim(), 
-        testo: (c[2]?.v ?? "").toString().trim()
+        materia: (c[0]?.v ?? "").toString().trim().toLowerCase(), tipo: (c[1]?.v ?? "").toString().trim(), testo: (c[2]?.v ?? "").toString().trim()
       };
     }).filter(x => x.materia === materiaAttivaNorm && x.testo !== "");
 
@@ -820,7 +868,7 @@ async function caricaEVisualizzaConsigliExtra() {
 }
 
 /* =====================================================================
-   FASE 5: ARENA DEI QUIZ (SISTEMA ELO COMPETITIVO)
+   FASE 5: ARENA DEI QUIZ
    ===================================================================== */
 document.getElementById("btn-start-quiz").addEventListener("click", avviaQuiz);
 document.getElementById("btn-quiz-retry").addEventListener("click", avviaQuiz);
@@ -842,8 +890,7 @@ function avviaQuiz() {
       QUIZ_DOMANDE = righe.map(riga => {
         const c = riga?.c || [];
         return {
-          materia: (c[0]?.v ?? "").toString().trim().toLowerCase(),
-          domanda: (c[1]?.v ?? "").toString().trim(),
+          materia: (c[0]?.v ?? "").toString().trim().toLowerCase(), domanda: (c[1]?.v ?? "").toString().trim(),
           opzioni: [(c[2]?.v ?? "").toString().trim(), (c[3]?.v ?? "").toString().trim(), (c[4]?.v ?? "").toString().trim(), (c[5]?.v ?? "").toString().trim()],
           corretta: parseInt(c[6]?.v ?? 0, 10)
         };
@@ -852,14 +899,12 @@ function avviaQuiz() {
       if (QUIZ_DOMANDE.length === 0) {
         QUIZ_DOMANDE = [{ domanda: "Nessun quiz inserito nel database per questa materia.", opzioni: ["Capito", "-", "-", "-"], corretta: 0 }];
       } else {
-        QUIZ_DOMANDE.sort(() => Math.random() - 0.5);
-        if (QUIZ_DOMANDE.length > 10) QUIZ_DOMANDE = QUIZ_DOMANDE.slice(0, 10);
+        QUIZ_DOMANDE.sort(() => Math.random() - 0.5); if (QUIZ_DOMANDE.length > 10) QUIZ_DOMANDE = QUIZ_DOMANDE.slice(0, 10);
       }
 
       quizIndiceCorrente = 0; quizPunteggio = 0;
       btnStart.disabled = false; btnStart.textContent = "Avvia";
-      mostraSchermata("quiz");
-      mostraDomandaCorrente();
+      mostraSchermata("quiz"); mostraDomandaCorrente();
     })
     .catch(e => { alert("Errore Arena."); btnStart.disabled = false; });
 }
@@ -901,7 +946,6 @@ function aggiornaBarraTimer() {
 function rispondiQuiz(indiceScelto) {
   if (quizRispostaBloccata) return;
   quizRispostaBloccata = true; fermaTimerQuiz();
-  
   const dq = QUIZ_DOMANDE[quizIndiceCorrente];
   const bottoni = document.querySelectorAll(".quiz-option");
   const feedbackEl = document.getElementById("quiz-feedback");
@@ -917,20 +961,15 @@ function rispondiQuiz(indiceScelto) {
   feedbackEl.classList.remove("hidden");
 
   setTimeout(() => { 
-    quizIndiceCorrente += 1; 
-    if (quizIndiceCorrente < QUIZ_DOMANDE.length) mostraDomandaCorrente(); 
-    else eloMatchConcluso(); 
+    quizIndiceCorrente += 1; if (quizIndiceCorrente < QUIZ_DOMANDE.length) mostraDomandaCorrente(); else eloMatchConcluso(); 
   }, 1300);
 }
 
-/* RENDERING E INVIO DEL PUNTEGGIO COMPETITIVO ELO */
 async function eloMatchConcluso() {
   document.getElementById("quiz-score").textContent = quizPunteggio;
   const eloResultEl = document.getElementById("quiz-elo-result");
   const eloDeltaEl = document.getElementById("quiz-elo-delta");
-  
-  eloResultEl.textContent = "Calcolo rango...";
-  eloDeltaEl.textContent = "Sincronizzazione cloud...";
+  eloResultEl.textContent = "Calcolo rango..."; eloDeltaEl.textContent = "Sincronizzazione cloud...";
   mostraSchermata("quizResults");
 
   const formData = new URLSearchParams();
@@ -940,30 +979,16 @@ async function eloMatchConcluso() {
 
   try {
     const res = await fetch(URL_GOOGLE_APPS_SCRIPT, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString()
+      method: "POST", mode: "cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: formData.toString()
     });
     const data = await res.json();
-
     if (data.status === "success") {
-      utenteLoggato.elo = data.nuovoElo;
-      localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
-
+      utenteLoggato.elo = data.nuovoElo; localStorage.setItem("ma_user", JSON.stringify(utenteLoggato));
       eloResultEl.textContent = `${data.nuovoElo} ELO`;
-      if (data.variazione >= 0) {
-        eloDeltaEl.textContent = `+${data.variazione} ELO (Salito!)`;
-        eloDeltaEl.className = "text-xs font-bold text-mint mt-0.5";
-      } else {
-        eloDeltaEl.textContent = `${data.variazione} ELO (Sceso!)`;
-        eloDeltaEl.className = "text-xs font-bold text-coral mt-0.5";
-      }
+      if (data.variazione >= 0) { eloDeltaEl.textContent = `+${data.variazione} ELO (Salito!)`; eloDeltaEl.className = "text-xs font-bold text-mint mt-0.5"; } 
+      else { eloDeltaEl.textContent = `${data.variazione} ELO (Sceso!)`; eloDeltaEl.className = "text-xs font-bold text-coral mt-0.5"; }
     }
-  } catch (err) {
-    eloResultEl.textContent = "Errore Cloud";
-    eloDeltaEl.textContent = "Impossibile aggiornare i punti.";
-  }
+  } catch (err) { eloResultEl.textContent = "Errore Cloud"; }
 }
 
 /* =====================================================================
@@ -982,7 +1007,7 @@ function escapeHtml(str) { const div = document.createElement("div"); div.textCo
     utenteLoggato = JSON.parse(accountLocale); 
     elencoMaterieUtente = JSON.parse(localStorage.getItem("ma_materie_" + utenteLoggato.username)) || [];
     document.getElementById("btn-logout").classList.remove("hidden");
-    await caricaDatiMaterieLocaliEDb();
+    await scaricaDizionarioBioEdAggiornaBuddies();
     apriDashboardHome(); 
   } else { mostraSchermata("welcome"); }
 })();
