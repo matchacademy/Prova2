@@ -66,12 +66,15 @@
       <h1 class="text-3xl font-display font-bold leading-tight mb-2">Match Accademico</h1>
       <p class="text-ink/60 text-sm mb-10">Trova compagni di studio, sfida la community nell'Arena dei Quiz e scala la classifica generale.</p>
       
-      <div class="space-y-3">
+            <div class="space-y-3">
         <button id="btn-go-login" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors shadow-sm">
           Accedi al tuo profilo
         </button>
         <button id="btn-go-register" class="w-full bg-white border border-ink/10 hover:bg-gray-50 text-ink font-semibold py-3.5 rounded-2xl transition-colors">
           Crea un nuovo profilo
+        </button>
+        <button id="btn-go-guest" class="w-full text-ink/60 text-sm font-semibold py-3 hover:underline">
+          O entra come Ospite (Demo)
         </button>
       </div>
     </section>
@@ -1018,6 +1021,21 @@ document.getElementById("btn-logout").addEventListener("click", () => {
 });
 
 function escapeHtml(str) { const div = document.createElement("div"); div.textContent = str; return div.innerHTML; }
+  /* AGGIUNTA PER MODALITÀ GUEST */
+document.getElementById("btn-go-guest").addEventListener("click", () => {
+  utenteLoggato = { username: "GuestUser", elo: 850, universita: "Demo University", sede: "Sede Virtuale" };
+  // Dati finti
+  elencoMaterieUtente = [
+    { materia: "Analisi I", professore: "Prof. Rossi", statoStudio: "Inizio studio 📖" },
+    { materia: "Fisica Medica", professore: "Prof. Bianchi", statoStudio: "Ripetizione 🔁" }
+  ];
+  
+  // Forza la visualizzazione della dashboard
+  apriDashboardHome();
+  // Nascondi pulsante logout per la demo
+  document.getElementById("btn-logout").classList.add("hidden");
+});
+
 
 (async function mainInit() {
   const accountLocale = localStorage.getItem("ma_user");
