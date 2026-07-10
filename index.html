@@ -67,13 +67,16 @@
       <p class="text-ink/60 text-sm mb-10">Trova compagni di studio, sfida la community nell'Arena dei Quiz e scala la classifica generale.</p>
       
       <div class="space-y-3">
-        <button id="btn-go-login" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors shadow-sm">
-          Accedi al tuo profilo
-        </button>
-        <button id="btn-go-register" class="w-full bg-white border border-ink/10 hover:bg-gray-50 text-ink font-semibold py-3.5 rounded-2xl transition-colors">
-          Crea un nuovo profilo
-        </button>
-      </div>
+  <button id="btn-go-login" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3.5 rounded-2xl transition-colors shadow-sm">
+    Accedi al tuo profilo
+  </button>
+  <button id="btn-go-register" class="w-full bg-white border border-ink/10 hover:bg-gray-50 text-ink font-semibold py-3.5 rounded-2xl transition-colors">
+    Crea un nuovo profilo
+  </button>
+  <button id="btn-go-guest" class="w-full bg-ink/5 hover:bg-ink/10 text-ink font-semibold py-3.5 rounded-2xl transition-colors">
+    Entra come Guest (Demo)
+  </button>
+</div>
     </section>
 
     <section id="screen-login" class="px-6 pt-6 pb-10 hidden">
@@ -1030,6 +1033,40 @@ function escapeHtml(str) { const div = document.createElement("div"); div.textCo
     apriDashboardHome(); 
   } else { mostraSchermata("welcome"); }
 })();
+
+  /* --- NUOVA FUNZIONE GUEST --- */
+document.getElementById("btn-go-guest").addEventListener("click", () => {
+  // Profilo fittizio
+  utenteLoggato = { 
+    username: "Ospite_Demo", 
+    universita: "Uni Demo", 
+    sede: "Polo Demo", 
+    elo: 1000, 
+    isGuest: true 
+  };
+  
+  // Dati fittizi per la dashboard
+  elencoMaterieUtente = [
+    { materia: "Diritto Privato", professore: "Prof. Rossi", statoStudio: "Inizio studio 📖" },
+    { materia: "Anatomia", professore: "Prof. Bianchi", statoStudio: "Ripetizione 🔁" }
+  ];
+  
+  document.getElementById("btn-logout").classList.remove("hidden");
+  apriDashboardHome();
+});
+
+// Modifica la funzione di apertura dashboard per bloccare le azioni dell'ospite
+const vecchiaDash = apriDashboardHome;
+apriDashboardHome = function() {
+  vecchiaDash();
+  if (utenteLoggato.isGuest) {
+    const btnAggiungi = document.getElementById("btn-apri-aggiungi");
+    btnAggiungi.textContent = "Guest (Solo lettura)";
+    btnAggiungi.disabled = true;
+    btnAggiungi.style.opacity = "0.5";
+    btnAggiungi.style.cursor = "not-allowed";
+  }
+};
 </script>
 </body>
 </html>
