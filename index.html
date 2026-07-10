@@ -478,11 +478,13 @@ async function inizializzaOpzioniOnboarding() {
         // Sostituisci da riga 478 a 497 con questo:
     let mappa = {}; 
 
-    righe.forEach(riga => {
+        righe.forEach(riga => {
       const c = riga?.c || [];
-      const uni = c[0]?.v?.toString().trim();
-      const corso = c[1]?.v?.toString().trim();
-      const mat = c[2]?.v?.toString().trim();
+      const uni = c[0]?.v?.toString().trim();    // Colonna A
+      const corso = c[1]?.v?.toString().trim();  // Colonna B
+      const mat = c[2]?.v?.toString().trim();    // Colonna C
+      const prof = c[3]?.v?.toString().trim();   // Colonna D
+      
       
       if (uni && uni.toLowerCase() !== "università" && corso && mat) {
         if (!mappa[uni]) mappa[uni] = {};
