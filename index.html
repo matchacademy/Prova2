@@ -474,9 +474,7 @@ async function inizializzaOpzioniOnboarding() {
     const testo = await risposta.text();
     const inizio = testo.indexOf("{"); const fine = testo.lastIndexOf("}");
     const json = JSON.parse(testo.substring(inizio, fine + 1));
-    const righe = json.table.rows || [];
-
-    let mappa = {}; 
+    const righe = json.table.rows || []; 
 
     righe.forEach(riga => {
       const c = riga?.c || [];
