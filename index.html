@@ -689,7 +689,7 @@
         uid: utenteLoggato.uid,
         materia: materiaHubAttiva.materia,
         professore: materiaHubAttiva.professore,
-        nuovoStato: nuovoStato
+        nuovoStato: nuevoStato
       };
 
       fetch(URL_GOOGLE_APPS_SCRIPT, {
@@ -889,7 +889,6 @@
       
       // Collegamenti pulsanti vari e bottoni di ritorno ritroso
       document.getElementById("btn-torna-dash").addEventListener("click", () => mostraSchermata("dashboard"));
-      document.getElementById("btn-risultati-chiudi").addEventListener("click", () => mostraSchermata("hub"));
       document.getElementById("btn-refresh-buddies").addEventListener("click", scaricaDizionarioBioEdAggiornaBuddies);
 
       // Trigger apertura modali inserimento esami
