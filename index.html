@@ -475,32 +475,34 @@ async function inizializzaOpzioniOnboarding() {
     const json = JSON.parse(testo.substring(inizio, fine + 1));
     const righe = json.table.rows || [];
 
-    let universitaSet = new Set(); let sediSet = new Set();
-    mappaMaterieProfessori = {}; 
+        // Sostituisci da riga 478 a 497 con questo:
+    let mappa = {}; 
 
     righe.forEach(riga => {
-      const c = riga?.c || []; 
-      if (c[0]?.v) {
-        const uniVal = c[0].v.toString().trim();
-        if (uniVal.toLowerCase() !== "universita" && uniVal.toLowerCase() !== "università") universitaSet.add(uniVal);
-      }
-      if (c[3]?.v) {
-        const sedeVal = c[3].v.toString().trim();
-        if (sedeVal.toLowerCase() !== "sede") sediSet.add(sedeVal);
-      }
-      if (c[1]?.v && c[2]?.v) {
-        const materiaVal = c[1].v.toString().trim();
-        const profVal = c[2].v.toString().trim();
-        if (materiaVal.toLowerCase() !== "materia" && profVal.toLowerCase() !== "professore") {
-          if (!mappaMaterieProfessori[materiaVal]) mappaMaterieProfessori[materiaVal] = [];
-          if (!mappaMaterieProfessori[materiaVal].includes(profVal)) mappaMaterieProfessori[materiaVal].push(profVal);
-        }
+      const c = riga?.c || [];
+      const uni = c[0]?.v?.toString().trim();
+      const corso = c[1]?.v?.toString().trim();
+      const mat = c[2]?.v?.toString().trim();
+      
+      if (uni && uni.toLowerCase() !== "università" && corso && mat) {
+        if (!mappa[uni]) mappa[uni] = {};
+        if (!mappa[uni][corso]) mappa[uni][corso] = [];
+        if (!mappa[uni][corso].includes(mat)) mappa[uni][corso].push(mat);
       }
     });
 
-    popolaSelettoreSemplice("input-universita", "Seleziona l'ateneo...", universitaSet);
-    popolaSelettoreSemplice("input-sede", "Scegli polo...", sediSet);
-    popolaSelettoreSemplice("select-materia", "Scegli la materia...", Object.keys(mappaMaterieProfessori));
+    const uniSelect = document.getElementById("input-universita");
+    uniSelect.innerHTML = '<option value="" disabled selected>Seleziona ateneo...</option>';
+    Object.keys(mappa).forEach(u => uniSelect.innerHTML += `<option value="${u}">${u}</option>`);
+
+    uniSelect.addEventListener("change", () => {
+      const corsoSelect = document.getElementById("input-corso");
+      corsoSelect.innerHTML = '<option value="" disabled selected>Seleziona corso...</option>';
+      const corsi = Object.keys(mappa[uniSelect.value] || {});
+      corsi.forEach(c => corsoSelect.innerHTML += `<option value="${c}">${c}</option>`);
+    });
+      }
+    });
 
     document.getElementById("onboarding-loading").classList.add("hidden");
     document.getElementById("form-onboarding").classList.remove("hidden");
